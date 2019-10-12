@@ -5,6 +5,11 @@ Author: Troy Fournier
 Vue.js Fundamentals
 URL: https://app.pluralsight.com/course-player?course=vuejs-fundamentals&author=jim-cooper&name=138c402b-b8d3-4299-b4d6-e1341e451c40&clip=0&mode=live
 
+Note:
+    When picking up from where you leave off start the server again
+    npm run serve
+
+
 Overview
     starting with vue/cli
     Components
@@ -94,3 +99,11 @@ App.js
 Creating the Home Page
     replace generated content with our own
     Get us more familiar with what CLI generated
+
+    Vue style guide rule
+        Components should be two words at a minimum
+    
+    App element is refering to the div in the template with id="app"
+
+    didn't need to hit refresh because vue cli is using webpack dev server including hot module replacement
+
