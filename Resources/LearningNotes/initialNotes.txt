@@ -1,0 +1,96 @@
+In This repo I will be learning Vue.js starting with the fundamentals
+
+Author: Troy Fournier
+
+Vue.js Fundamentals
+URL: https://app.pluralsight.com/course-player?course=vuejs-fundamentals&author=jim-cooper&name=138c402b-b8d3-4299-b4d6-e1341e451c40&clip=0&mode=live
+
+Overview
+    starting with vue/cli
+    Components
+    Router
+    Managing state
+    Directives
+    Filters
+    Package and Deploy
+
+Getting started with the vue cli
+    Will be building Build-a-bot site
+
+The Vue Instance
+    Heart of the application 
+    Created whenever you call new Vue()
+        only used once in a typical vue application
+
+    Usually tell it to render a component
+    ex
+        new Vue({render: h => h(App)})
+
+    App will become the top level component in a hierarchy call Vue Structure
+
+    wraps entire application, inside that will be app component
+        App can have child component, which may have child components
+
+    App will contain router vue which shows content for current URL
+        as url changes it updates the content inside the router view
+
+Setting up the environment
+    install node
+        Mac: curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.0/install.sh | bash
+
+    nvm install 8.11.2
+        using same version as course
+
+    nvm use 8.11.2
+
+Creating a new project with the vue cli
+    Vue CLI recommended when creating a project to be deployed
+        vue team has designed it to allow optimization for production
+
+Generate project
+    vue create build-a-bot
+        creats a new vue project in the specified directory. In this case the build-a-bot directory
+
+    allows for choosing features and installs npm depenencies
+
+    setup eslint
+
+Package.json
+    brought in 3 scripts for us that call the vue cli server
+
+    vue cli service manages a local dev webserver based on webpack
+        more in another course
+
+    npm run serve
+        compiles application for development
+        runs server for us on port 8080
+
+    runs sample webpage for us
+
+Main.js
+    entry point for vue application
+
+    creates a new vue Instance
+    passes in options object
+
+    configuring render property
+        set to a function that is getting App component passed to it
+
+App.js
+    3 components to file
+        Template
+        Script
+        Style
+
+    Vue specific wepack plugin being used to parse file into indivdual parts and compile in a way a browser can use them
+    Passed into vue instance so vue works with webpack to render
+
+    This is the top level component in our App
+        used to display route components and child components
+
+    App is displaying HelloWorld as a child component
+        components>HelloWorld.vue
+
+Creating the Home Page
+    replace generated content with our own
+    Get us more familiar with what CLI generated
