@@ -107,3 +107,213 @@ Creating the Home Page
 
     didn't need to hit refresh because vue cli is using webpack dev server including hot module replacement
 
+Module 2
+    Creating components
+    Using bindings to display and handle events
+    Conditionally displaying elements
+        v-if and v-show
+    Repeating elements with v-for
+    Styling components
+    Working with component lifecycle hooks
+    Reducing duplication with mixins
+
+Global Components vs Single-file Components
+
+Components
+    Really just another view instance
+    easiest way to get something to render:
+        new Vue({
+            template: ''<div>Hello World</div>',
+            el: '#app',
+        });
+
+        Creating a new instance of view
+        Passing in a options object with a hello world template
+        line 127 tells vue which element of the page to mount the template in
+
+Global Components
+    const World = Vue.component(
+        'World',
+        { template: '<span>World</span>' },
+    );
+    passing in the component name 'World'
+    and the option object
+
+Components are really just vue instances, with exception of the options object you pass in to the new component has the exact same properties as the one you pass in to a view instance
+
+can now:
+    new Vue({
+            template: ''<div>Hello <World /></div>',
+            el: '#app',
+        });
+
+World component is a Global Component
+    just a World constant you can use anywhere you want.
+    Useful in smaller applications and prototyping
+
+Limitations
+    Hard to locate
+    Use string templates all HTML must be defined in Javascript string
+    CSS is not encapsulated
+    No build time compilation support
+
+Single-file Components
+    file with a .vue extension 
+    
+    typically 3 sections
+        Template
+            required
+        Script
+            required
+        Style
+            optional
+
+Template section
+    Where we define HTML template
+
+Script section
+    define Javascript functionality of component
+    export it so it can be imported else where
+
+Style Section
+    where we define css
+
+vue files compiled by webpack at runtime to create JS, CSS, and HTML files for the browser
+
+App.vue is a Single-file component
+
+Creating your First Component
+
+    Created robot builder component
+        all we have done is export it and use it in the App.vue
+
+Binding Attributes to Data with v-bind
+
+    component options need a data function to have data provided to a component
+
+    made a data folder
+    made a json file that contains all of the parts data in the data folder
+        mostly json data
+
+    first line parts.js
+    const images = require.context('./images', true, /\.png$/);
+
+    require.context makes webpack aware of the image urls so that we can use them throughout the json data as realative urls
+    other than that all json
+
+    parts object is a constant that is exported at the bottom
+
+    parts object is an object that is comprised of objects for heads, arms, bases, and torsos that are all arrays of the specific parts
+
+    component needs to import this data
+        ex  
+        import avaiableParts from '../data/parts.js';
+
+    return the avaiableParts as part of the data object
+        return {
+            avaiableParts,
+        };
+
+Using data in the template
+    Some directives can take an "argument" denoted by a colon after the direcrtive name
+    v-bind
+        used to reactively update an HTML attribute
+        binds attribute to data
+    ex
+        <img v-bind:src="availableParts.heads[0].src" title="head"/>
+        allows us to use the data that was provided to us in avaiableParts
+
+Binding to events with v-on
+    v-on
+        listens to DOM events and runs JavaScript when they're triggered
+
+methods
+    object passed to the component options
+
+Vue calls selectNextHead function via v-on
+function increments the data
+binding updates the attribute using it
+
+Helper functions can be written in the script section of components before the export
+    same place imports happen
+
+Using Shorthand Bindings
+    v-bind
+        : shorthand for it
+    v-on
+        @ shorthand for it
+
+Binding to Computed Properties
+    don't do computed properties in template
+
+Computed
+    option on the component that contains methods
+
+    use in script (move it into the component)
+    computed: {
+
+    },
+
+Displaying Data with Interpolation
+    displaying an attribute (name) of a computed property
+
+    double brackets used for Interpolation
+        {{}}
+    can place valid expressions in the doubl brackets
+
+v-once
+    any bindings in element is only rendered once
+    good for performance
+    use on things that will not change
+
+Conditionally displaying content with v-if and v-show
+
+v-if
+    the element is removed from the DOM if the condition evaluates to false
+
+v-show
+    display none is added to the element if the condition in v-show evaluates to false
+
+v-show is used when the content being shown and hidden is expensive to calculate and hidden or show frequently
+    efficenecy thing
+
+Repeating Elements with v-for
+
+
+Vues change detection works by hooking into the getters and setters of properties in the data property
+    data must be in the data function if you want a change to happen on the page when the data changes
+
+Object.assign
+    good javascript programming practice that avoids inadvertent pointers to the same object instance
+
+v-for
+    goes on an element
+    get a new element for each loop
+    works like foreach
+    ex
+        <tr v-for="robot in cart">
+        </tr>
+
+    robot can be used as a variable within this element
+
+    When ever you are repeating data vue needs to be able to identify each element in there for updates
+        thus need a unique key attribute for repeated data
+    ex  
+        <tr v-for="(robot, index) in cart" :key="index">
+            <td>
+                {{ robot.head.title }}
+            </td>
+            <td class="cost">
+                {{ robot.cost }}
+            </td>
+        </tr>
+        we can get the index of the robot with the (robot, index)
+        we then bind this index to the key with a v-bind
+
+performance warning
+    never use v-for and v-if on the same element
+
+    if you need to hide and show data on v-for need to internal element or something like that
+
+Styling Components
+
