@@ -434,7 +434,99 @@ Mixins
     can use a mixin to share any component options across many components
         including lifecycle hooks, props, computed propertier ect.
 
-Summary Module 2
+Summary Module 3
     Creating components
     Using bindings to display data and handle events
+    ...
+
+Module 4
+Intercomponent Communication
+    Using props to share data with child components
+    Validating components with props
+    Passing data to parents components with events
+    Injecting content into a child component with slots
+
+Creating Child Components
+    refactoring part selector code into child component
+
+    ie
+        <div class="left part">
+            <img :src="selectedRobot.leftArm.src" title="left arm"/>
+            <button @click="selectPreviousLeftArm()" class="prev-selector">&#9650;</button>
+            <button @click="selectNextLeftArm()" class="next-selector">&#9660;</button>
+        </div>
+
+    taking above and moving it into its own component with data passed into it from robot builder
+
+    when referencing a child component it must be imported and listed as a component in the components option of the parent
+        this makes the parent component aware of and able to be used in its template
+    ex  
+        shorthand
+        components: { PartSelector },
+        long
+        components: { PartSelector: PartSelector },
+
+Using Props to Share Data with Child Components
+    bind data from the parent to an attribute of the child  
+        need to create the attribute on the child
+    
+    props: []
+        used to add attributes to a component
+        ex
+            props: ['parts'],
+
+    Not all attributes need binding only ones that are attributes that are getting expressions passed along
+
+Validating Props
+    prevent parents components from passing in bad data
+
+    use a key object for props instead of array
+        keys are the names of the props
+        values are objects that specify validation information
+
+    Error will now show on browser console warning of invalid data type on a prop
+
+    can also make props required
+
+Validator Function
+    specifies what a specific prop can be
+    ex
+        string can not be blank
+        validator(value) {
+            return ['left', 'right', 'top', 'bottom', 'center'].includes(value);
+        },
+        placed on the prop
+
+Passing Data to Parent Component with Events
+    Create events in the child component that the parent component can bind to
+
+$emit
+    causes the component to 'emit' and event on itself to binded listeners
+    ex 
+        this.$emit('partSelected', this.selectedPart)
+
+        a parent component can now bind to the partSelected event when it created the component
+        passes this.selectedPart up to the parent
+
+    parents bind to emit event with v-on
+        just like any other event
+    ex
+        @partSelected="<inline or function>"
+
+        inline
+        @partSelected="part => selectedRobot.head=part"/>
+
+Updated()
+    lifecycle hook called whenever the data for the component is updated
+
+Injecting Content into a Child Component with slots
+
+<slot></slot>
+    vue specific element
+    content that is placed inside of the component with the slot element will be placed where the <slot></slot> is in the component
+
+     default content can be provided to a slot
+        place content in between the slot tags on the component
+
+Summary Module 4
     ...
