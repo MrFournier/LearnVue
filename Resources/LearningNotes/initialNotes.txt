@@ -530,3 +530,131 @@ Injecting Content into a Child Component with slots
 
 Summary Module 4
     ...
+
+Routing from Page to Page
+    Adding routing to app
+    Linking to routed pages
+    Styling links based on the active route
+    Navigating from code
+    Working with route params
+    Using nested routes
+    Using named views
+    Enabling HTML5 History mode
+    Preventing navigation with navigation guards
+
+Adding Routing to your App
+    npm install vue-router --save
+        install view router via the cli in a vue project
+
+    need a place to define all of the routes in the app
+        creating router folder
+
+    index.js file  
+        import Vue from 'vue';
+        import Router from 'vue-router';
+
+        Vue.use(Router);
+
+        export default new Router({
+            place routes here
+        });
+    lets vue know the app will be using routing
+
+Router with routes
+    export default new Router({
+        routes: [{
+            path: '/',
+            name: 'Home',
+            component: HomePage,
+        }],
+    });
+    tells vue when on the url ('/') then load the specified component (HomePage)
+    the name is used in code to navigate to the route
+
+Need to pull routes in when we create vue instance so that vue is aware of them
+    add it to the vue configuration object
+
+Must tell App where to display routed components
+
+<router-view></router-view>
+    displays the component that matches the current route
+
+Vue adds a hashtag to URL ad navigates based on what after that
+    this will be removed later with HTML 5 history mode
+
+Linking to Routed Pages
+    <router-link></router-link>
+        vue specific element to link to a routed page
+
+    ex
+        <router-link :to="{name: 'Home'}">
+    use binding to access the route via the route name
+
+    <router-link to="/build">
+    can also use hard coded strings of the url you want
+
+Styling Links Based on the Active Route
+
+.router-link-active
+    special vue class that is applied to any link that matches the current route
+    by default this is an inclusive match on the route
+
+    can add exact attribute on router-link to match route exactly for Styling
+
+    can use active-class="" attribute if you don't want to use the .router-link-active class
+
+Navigating from Code
+    this.$router
+        available on any component when you pass a router into the Vue instance
+
+    .push('url to nav to ')
+        sends to the specified url
+
+    ex
+        this.$router.push('/part');
+    sends site the the /part url
+    this example uses a string url can alternatively pass on object
+
+Working with Route Params
+    :<varName>
+        used in routes file to specify router params
+    ex 
+        {
+            path: '/parts/:partType/:id',
+            name: 'Parts',
+            component: PartInfo,
+        },
+    partType and id are vars
+
+    route params are avaiable on the components route property
+    ex
+        this.$route.paramName
+
+Destructuring
+    this:
+        const partType = this.$route.params.partType;
+        const id = this.$route.params.id;
+    can become
+        const { partType, id } = this.$route.params;
+
+    that is Destructuring params are assigned to the vars in order
+
+Params that are pulled off of a url are always strings
+
+Must use object syntax to pass Route Params
+
+Navigating from Code with Route Params
+    ex
+        <img @click="showPartInfo()" :src="selectedPart.src" title="arm"/>
+        showPartInfo() {
+        this.$router.push({
+            name: 'Parts',
+            params: {
+            id: this.selectedPart.id,
+            partType: this.selectedPart.type,
+            },
+        });
+        },
+
+Passing Params as Props
+
