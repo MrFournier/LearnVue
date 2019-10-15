@@ -657,4 +657,20 @@ Navigating from Code with Route Params
         },
 
 Passing Params as Props
+    const { partType, id } = this.$route.params;
+        downside couples component to the router
+
+    Can make it work as a routed component and a child component by passing the params as props
+        set the props property to true on the route
+
+props: true,
+    router property
+    tells vue to pass the route params as props to the component
+
+    in the component you can now get the params off of this instead of this.$route.params
+
+    can add validation to the props this way
+        by making the props an object containing the params
+
+Nested Routes
 
