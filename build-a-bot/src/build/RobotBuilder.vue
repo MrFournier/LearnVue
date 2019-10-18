@@ -26,27 +26,32 @@
         <PartSelector
             :parts="availableParts.heads"
             position="top"
-            @partSelected="part => selectedRobot.head=part"/>
+            @partSelected="part => selectedRobot.head=part"
+            @addedToCart="addedToCart => this.addedToCart=addedToCart"/>
     </div>
     <div class="middle-row">
       <PartSelector
         :parts="availableParts.arms"
         position="left"
-        @partSelected="part => selectedRobot.leftArm=part"/>
+        @partSelected="part => selectedRobot.leftArm=part"
+        @addedToCart="addedToCart => this.addedToCart=addedToCart"/>
       <PartSelector
         :parts="availableParts.torsos"
         position="center"
-        @partSelected="part => selectedRobot.torso=part"/>
+        @partSelected="part => selectedRobot.torso=part"
+        @addedToCart="addedToCart => this.addedToCart=addedToCart"/>
       <PartSelector
         :parts="availableParts.arms"
         position="right"
-        @partSelected="part => selectedRobot.rightArm=part"/>
+        @partSelected="part => selectedRobot.rightArm=part"
+        @addedToCart="addedToCart => this.addedToCart=addedToCart"/>
     </div>
     <div class="bottom-row">
       <PartSelector
         :parts="availableParts.bases"
         position="bottom"
-        @partSelected="part => selectedRobot.base=part"/>
+        @partSelected="part => selectedRobot.base=part"
+        @addedToCart="addedToCart => this.addedToCart=addedToCart"/>
     </div>
     <div>
         <h1>Cart</h1>
@@ -84,10 +89,21 @@ import CollabpsiableSection from '../shared/CollapsibleSection.vue';
 
 export default {
   name: 'RobotBuilder',
+  beforeRouteLeave(to, from, next) {
+    if (this.addedToCart) {
+      next(true);
+    } else {
+      /* eslint no-alert: 0 */
+      /* eslint no-restricted-globals: 0 */
+      const response = confirm('You have not added your robot to your cart, are you sure you to leave?');
+      next(response);
+    }
+  },
   components: { PartSelector, CollabpsiableSection },
   data() {
     return {
       availableParts,
+      addedToCart: false,
       cart: [],
       selectedRobot: {
         head: {},
@@ -115,6 +131,7 @@ export default {
         + robot.torso.cost
         + robot.base.cost;
       this.cart.push(Object.assign({}, robot, { cost }));
+      this.addedToCart = true;
     },
   },
 };

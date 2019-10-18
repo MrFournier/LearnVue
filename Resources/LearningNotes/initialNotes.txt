@@ -673,4 +673,156 @@ props: true,
         by making the props an object containing the params
 
 Nested Routes
+    Allow portion of page to be rerender and change the url
+
+    Using another router-view in the component
+        add another route that consists of a parent route for the BrowseParts Page and a child route for the type of part
+
+    this route needs to go above the /parts/:partType/:id route
+
+    reason:
+        {
+            path: '/parts/browse',
+            name: 'BrowseParts',
+            component: BrowseParts,
+        },
+        {
+            path: '/parts/:partType/:id',
+            name: 'Parts',
+            component: PartInfo,
+            props: true,
+        },
+    Vue has no idea that 'browse' isn't a part type so its needs to go first so that it can match before reaching the second /parts/:partType
+
+    order is important
+
+    child route ex:
+    {
+      path: '/parts/browse',
+      name: 'BrowseParts',
+      component: BrowseParts,
+      children: [
+        {
+          name: 'BrowseHeads',
+          path: 'heads',
+          component: RobotHeads,
+        },
+        {
+          name: 'BrowseArms',
+          path: 'arms',
+          component: RobotArms,
+        },
+      ]
+    }
+    add the children array to a route
+
+    the paths for the child routes are relative to the parent
+    ex
+        absoulte path for arms /parts/browse/arms
+
+    child route router-link ex
+        <router-link :to="{name: 'BrowseHeads'}">Heads</router-link>
+    can simply use the name of the child route when binding
+
+Using Named Views
+    think of as sibling routes
+    allow multiple router views on the same component
+        the route specifies which two or more vues to display
+
+    router-view s that are not given a name by default have the name default
+
+    components property get added to the route
+        this replaces component
+
+        it takes a keyed object with the keys being the router-view names and the values being the component to display
+    ex  
+        {
+            path: '/',
+            name: 'Home',
+            components: {
+                default: HomePage,
+                sidebar: SidebarStandard,
+            },
+        },
+
+    feel like more depth could be needed on this
+
+Enabling HTML5 History Mode
+    hashtag is in urls because HTML5 history mode is off
+
+    how to turn off
+        mode: 'history',
+
+        needs to be set in the router config object
+            in index.js (router file)
+
+    Consequence
+        causes the full url to be sent to the server
+
+        because server has no files at the full url in its directory it will 404
+
+    hashtag causes only the part before the hashtag to be send to the server with the rest handled client sidebar
+        this works because vue doesn't have anything at the directory of the full url. but it does have index files that know how to handle it
+
+    Solution
+        set up server to always return the main index.html file whenever you load in a url
+
+        more on this in deploying to production
+
+Preventing pages from Loading with Navigation Guards
+    allow you to prevent a page from or prevent a user from leaving a page based on specific criteria
+
+Before Enter Guard
+    prevent page from loading if :id in route param isn't a number
+
+    different from validation as validation still loads the page and only throws a dev warning
+
+    can add a route-guard on a component or a route
+
+    how to add on a route
+        add a beforeEnter() on the keyed route object
+    
+    beforeEnter(to, from, next)
+        to:
+            the route to navigate to
+        from:
+            the route you are navigating from
+        next function
+            called with a value of true to allow navigation
+            called with a value of false to stop navigation
+
+        can get params from the to route
+        
+    ex
+        {
+            path: '/parts/:partType/:id',
+            name: 'Parts',
+            component: PartInfo,
+            props: true,
+            beforeEnter(to, from, next) {
+                const isValidId = Number.isInteger(Number(to.params.id));
+                next(isValidId);
+            },
+        },
+
+Preventing Navigation Away From Pages With Navigation Guard 
+    Can be on the route or the component
+
+    example we will do needs information from the component so we will make it on the component
+
+beforeLeave()
+    when adding on a component it becomes beforeRouteLeave()
+        same thing for Enter
+
+    to, from, next
+        params
+
+Summary Module 5
+    Adding routing to app
+    Linking to routed pages
+    Styling links based on active route
+    Navigatin from code
+    ...
+
+
 

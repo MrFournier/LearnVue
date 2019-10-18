@@ -53,6 +53,7 @@ export default {
   },
   updated() {
     this.emitSelectedPart();
+    this.$emit('addedToCart', false);
   },
   methods: {
     emitSelectedPart() {
