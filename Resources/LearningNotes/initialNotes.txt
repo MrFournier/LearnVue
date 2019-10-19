@@ -1002,3 +1002,209 @@ Where ever data form action is needed you must dispatch the action
 Data folder is no longer need as this is all coming from an API
 
 Using Actions to Save Data to an API
+    actions takes state, which can be deconstructed, and data to be sent to API
+    ex
+        actions: {
+            addRobotToCart({ commit, state }, robot) {
+                const cart = [...state.cart, robot];
+                axios.post('/api/cart', cart)
+                    .then(() => commit('addRobotToCart', robot));
+            },
+        }
+    adds robot to cart on server via axios.post('/api/cart', robot)
+        sending cart to the /api/cart end point
+    adds robot to store so local app reflects change as well via the promise .then(() => commit('addRobotToCart', robot))
+        the promise takes a function that gets run after API succeeds which uses commit to mutate store data
+
+commit mutations, dispatch actions
+
+Returning Promises from Actions
+    can return the promise from the action, then are able to use the promise from the components that dispatch the action
+        ie you can use .then after the dispatch in the component to do something on success/fail
+
+Organizing the Store with Modules
+
+Modules
+    Allow a single store to be broken up into multiple modules for maintainability
+
+    modules: {}
+        property on the Vuex.Store 
+        ex
+            modules:{ 
+                robots: robotsModule
+             },
+        robotsModule needs to be imported from the .js file that contains the module
+
+    modules can be accessed from components in the following example
+        this.$store.state.robots.cart;
+            note robots is the name of the module on the $store
+    
+    There is still a single state object and in it there is a robots module
+
+Namespacing Modules
+    without namespaces vue doesn't know which module a dispatch belongs to
+    all modules with a matching action will respond
+
+    namespaced
+        property on module
+        namespaced: true,
+
+        requires a namespace before an action name on dispatch calls
+        ex
+            this.$store.dispatch('robots/addRobotToCart', Object.assign({}, robot, { cost }))
+        the robots/ is the namespace before the name of the action
+
+State
+    always namespaced even if module is not namespaced
+
+Mutations, Actions, Getters
+    only namespaced if namespaced is true
+
+Accessing Namespaced Getters
+    use a string to access the property prefacing it with namespace/
+    ex
+        this.$store.getters['robots/cartSaleItems'];
+    robots/ is the namespace here
+
+Understanding Global and Namespaced State
+    one single state tree or state object
+
+    root state
+        state that is not in a namespaced module
+
+    getters are shared with root if not Namespaced
+        thus if root and unnamespaced module have the same getter name it will error
+
+    State passed into getters, actions, mutations within module is always the local modules state
+
+Getters 
+    Params
+        state
+            local state
+        getters
+            in non namespaced
+                all getters
+            in namespaced
+                only local getters
+        rootState
+            the root's state
+    ex
+        getters: {
+            foo(state, getters, rootState) {
+                return ${rootState.foo};
+            }
+        }
+    this returns the root state's foo object
+
+rootState
+    accessible by getters and actions
+    not accessible by mutations
+
+Using Vuex MapState Helper 
+    used in computed section of component
+
+    import { mapState } from 'vuex';
+
+    export default {
+        name: app,
+        computed: {
+            ...mapState({ rootFoo: 'foo' })
+            rootFoo() {
+                return this.$store.state.foo;
+            },
+        }
+    }
+
+    note that lines
+        ...mapState({ rootFoo: 'foo' })
+
+    and 
+        rootFoo() {
+            return this.$store.state.foo;
+        },
+    are equivalent
+
+    to get mapState from modules
+        ...mapState({ rootFoo: 'foo', usersFoo: state => state.users.foo });
+
+        this would be the object foo from the root store and the object foo from the users module
+    
+    note
+        usersFoo: state => state.users.foo 
+    replaces
+        usersFoo() {
+            return this.$store.state.users.foo;
+        }
+
+    Second MapState Syntax
+        this syntax only works with namespaced modules
+        ...mapState('robots', { robotsFoo: 'foo' })
+        'robots'
+            is the namespace
+        'foo'
+            is the property from the namespace state
+        robotsFoo
+            var for above
+
+    Note that can replace
+        robotsFoo() {
+            return this.$store.state.robots.foo;
+        }
+
+Using Vuex MapGetters Helper
+    identical to using MapState
+    used in computed section of component
+
+    import { mapState, mapGetters } from 'vuex';
+        not can import either one on its own
+
+    ...mapGetters({rootGetterFoo: 'foo'});
+    ...mapGetters('robots', { robotsGetterFoo: 'foo' });
+
+    replace
+        rootGetterFoo() {
+            return this.$store.getters.foo;
+        }
+        robotsGetterFoo() {
+            return this.$store.getters['robots/foo'];
+        }
+
+Using Vuex MapActions Helper
+    slightly different
+    used in the methods section instead of the computed section of a component
+
+    import { mapActions } from 'vuex';
+
+    ...mapActions('robots', ['getParts', 'addRobotToCart']),
+
+    now these are methods here and we can call
+        this.getParts
+    replaces
+        this.$store.dispatch('robots/getParts');
+        
+    mapActions helper takes care of calling dispatch for us
+
+    now
+        this.addRobotToCart(Object.assign({}, robot, { cost }))
+            .then(() => this.$router.push('/cart'));
+    replaces
+        this.$store.dispatch('robots/addRobotToCart', Object.assign({}, robot, { cost }))
+            .then(() => this.$router.push('/cart'));
+
+Using Vuex MapMutations Helper
+    used in methods section
+
+    import { mapMutations } from 'vuex'
+
+    ...mapMutations('module name', ['someMutation']);
+
+    module name, array of mutations to map over
+    can use object notation also if you want to rename locally
+    ex  
+        ...mapMutations('module name', { localName: 'someMutation' });
+
+Summary Module 6
+    Vuex
+
+Creating Custom Directives and Filters
+    
