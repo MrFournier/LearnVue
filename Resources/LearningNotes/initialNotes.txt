@@ -824,5 +824,181 @@ Summary Module 5
     Navigatin from code
     ...
 
+Managing State and Server Communication with Vuex
+    How to handle data
+
+    The Vuex Store
+        Storage mechnism
+        interface for mutating data, requesting async mutations, managing complex logic
+
+        Shared State Tree
+            Single object that contains all of the data for your application
+
+        Mutations
+            synchronous 
+            tells the store to commit a mutation, keeps everything in the store consistent and working well with change detection
+
+        Actions
+            Asynchronous
+            Can get data from apis
+            work hand in hand with mutations
+            promises,
+
+        Getters 
+            functions that fetch data on the state
+            does calculation or manipulation on them
+
+Creating a Vuex Store
+
+Installing Vuex
+    npm install vuex --save
+
+Create a Vuex Store
+    store folder
+    index.js
+        import vue and vuex
+
+        Vue.user(Vuex);
+
+        export default new Vuex.Store({
+
+        });
+
+main.js
+    the main JavaScript files that drive the vue app
+    this is where the Vue instance is created
+
+Changing a Vuex Store State with Mutations
+    store needs a state object
+        this is where the data will restricted
+        everything that is added to the store must start with a default value
+            change detection works by tapping into getters and setters of objects in store. With no default property vue will not notice changes
+
+    ex add cart property to state object
+        export default new Vuex.Store({
+            store: {
+                cart: [],
+            },
+        });
+
+mutations object 
+    Property of a vuex state
+    All changes must go through a mutation
+
+    ex
+        mutations: {
+            addRobotToCart(state, robot) {
+                state.cart.push(robot);
+            },
+        },
+
+    mutation params
+        state
+
+        robot 
+            all remaining parameters after state are data you want to pass in
+
+Calling Mutation
+    $store
+        can access store this way because global vue instance is aware of the store
+
+    .commit('name of mutation', data to pass into store)
+
+Retreiving Items from the Vuex Store
+    use a computed property to get data from the store
+    ex
+        computed: {
+            cart() {
+            return this.$store.state.cart;
+            },
+        },
+    Can't mutate a vuex store directly but you can access a vuex store directly to read from
+
+Using Vuex Getters to Return Calculated Data
+    can do any calculation from state that you want to
+    Can be added as getters to store to make them reuseable
+    
+    state
+        first param of getters
+    ex
+        getter: {
+        cartSaleItems(state) {
+            return state.cart.filter(
+                item => item.head.onSale
+                || item.torso.onSale
+                || item.leftArm.onSale
+                || item.rightArm.onSale
+                || item.base.onSale,
+            );
+        },
+    Based on data in the state and exposed as cartSaleItems getter
+
+Accessing getters from component
+    this.$store.getters.cartSaleItems;
+
+Using Actions to Work with APIs and Asynchronous Data
+
+Action
+    Asynchronously get data from API
+
+    context
+        first param
+        exposes serveral items for working with the state
+        ex
+            actions: {
+                getParts(context) {
+
+                },
+            },
+        you can desconstruct out of this object
+        ex
+            actions: {
+                getParts({commit}) {
+
+                },
+            },
+        got only the commit function out of the context
+        other things you can get from context: state, getters, commit, dispatch
+
+commit
+    how we call mutations on the store
+
+Vue doesn't provide any of its own custom data access libraries to make HTTP calls
+    instead allow you to use whatever you want
+
+Axios
+    how to install 
+        npm install axios --save
+
+    import in store and you can use it to get data
+
+    .get(url)
+        url
+            the url you want to hit with HTTP get request
 
 
+    vue provides a way to configure a built in proxy to hit our APIs
+    can proxy api through dev server that our vue app is being served from 
+
+Proxy Vue API
+    configuration
+        vue.config.js
+    this is webpack config vue uses this behind the scenes
+    with what is in there axios.get('/api/parts'); now get proxied to the server running on port 8081
+
+    Need to restart server when you update proxy config
+
+Where ever data form action is needed you must dispatch the action
+
+.dispatch 
+    store function
+    kicks off actions
+
+    async call to get the store to get the parts
+    can then get these parts from the store using a computed property
+
+    created a mixin that is using dispatch to get parts via a computed prop
+    
+Data folder is no longer need as this is all coming from an API
+
+Using Actions to Save Data to an API
