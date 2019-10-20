@@ -1207,4 +1207,204 @@ Summary Module 6
     Vuex
 
 Creating Custom Directives and Filters
+    Creating and using custom directives
+        such as v-if
+    Passing data to directives
+    Declaring directives locally vs globally
+    Creating and using Filters
+    Filters locally vs globally
+
+Creating a Custom Directive
+
+Directive
+    A special token in the markup that tells the library to do something to a DOM element
+
+    A vue.js directive can only appear in the form of a prefeixed HTML attribute with the following format
+        <element
+            prefix-directiveId="[argument:] expression [| filters...]">
+        </element>
     
+    simple example
+        <div v-text="message"></div>
+
+    v
+        prefix which is the default
+    text
+        the directive id
+    message
+        the expression
+
+    this one instructs Vue to update the textContent whenever the message property on the Vue instance changes
+
+Creating our own directives
+    directive have a handful of methods that act as hooks
+
+    bind:
+        this is a hook
+        gets called as soon as a directive get bound to its parent element
+
+        first param is element
+            the parent element itself (in PartsSelector v-pin example this is the span it is on)
+
+    created in a js file
+    ex
+        export default {
+            bind: (element) => {
+                element.style.position = 'absolute';
+                element.style.bottom = '5px';
+                element.style.right = '5px';
+            },
+        };
+    that is a directive that changes a couple styles on the parent element
+
+    to use a directive in a component import it and at it to the directives property
+    ex
+        import pinDirective from '../shared/pin-directive';
+
+        directives: {
+            pin: pinDirective,
+        },
+
+    Note v- get prepended automatically
+
+Passing Data to Directives
+    multiple ways to pass data to directives
+
+via Args
+    v-pin:position.top.right
+        position
+            is the argument
+        .top.right
+            are the modifiers
+
+    binding 
+        second param to directive
+        gives access to the Args
+
+    ex
+         export default {
+            bind: (element, binding) => {
+                console.log('arg: ', binding.arg, 'modifiers: ', binding.modifiers);
+                element.style.position = 'absolute';
+                element.style.bottom = '5px';
+                element.style.right = '5px';
+            },
+        };
+
+    modifiers is an object with each modifer set to true if they exist
+
+via Object
+    v-pin="{ bottom: '10px', right: '5px' }"
+
+    ex
+        export default {
+            bind: (element, binding) => {
+                Object.keys(binding.value).forEach((position) => {
+                element.style[position] = binding.value[position];
+                });
+                element.style.position = 'absolute';
+            },  
+        };
+
+    binding.value loops over what is in the object passed in
+        position becomes the keys bottom and right
+        binding.value[bottom] = '10px'
+        binding.value[right] = '5px'
+
+Using Directive Lifecycle Hooks
+
+    update:
+        triggers when the parent component is updated
+
+    ex
+        function applyStyle(element, binding) {
+            Object.keys(binding.value).forEach((position) => {
+                element.style[position] = binding.value[position];
+            });
+            element.style.position = 'absolute';
+        }
+
+        export default {
+            bind: (element, binding) => {
+                applyStyle(element, binding);
+            },
+            update: (element, binding) => {
+                applyStyle(element, binding);
+            },
+        };
+
+    example uses a function to do the same thing when the directive is bound and the directive's parent component is updated
+        same thing on two different lifecycle hooks
+
+    inserted:
+        fires when the bound element has been inserted into its parent node
+
+    componentUpdated:
+        fires after all children have been updated
+
+    unbind:
+        called when the directive is unbound from the parent component
+
+bind and update are so common there is a shorthand to hook into both 
+    ex
+        export default function (element, binding) {
+            Object.keys(binding.value).forEach((position) => {
+                element.style[position] = binding.value[position];
+            });
+            element.style.position = 'absolute';
+        }
+    this is now binding to both the bind and update hooks
+
+Making Directives Available globally
+    so far we have only made directive avaiable to a single component
+        this is good if it only relates to a single or couple components
+
+    often directives are wanted through out the app
+        better to declare these globally
+
+    declare globally in the main.js file
+    ex
+        import pinDirective from './shared/pin-directive';
+
+        Vue.directive('pin', pinDirective);
+    import the directive and pass it in with a name to the Vue.directive function
+
+Creating a Custom Filter
+    allow easy transformation of data
+
+    take data in as input and output something different
+
+    filters are really just functions that take a minimum of one param
+
+    ex
+        export default function (amount) {
+        
+        }
+
+    To Use
+        add to the filters: property of a component
+    ex
+        filters: {
+            currency: currencyFilter,
+        },
+    Note must import currencyFilter
+
+    since filter are just functions can also import them inside component or anywhere else and use them as computed prop
+
+Declaring Filters Globally
+    in main.js
+    ex
+        import currecyFilter from './shared/currency-filter';
+
+        Vue.filter('currency', currecyFilter);
+    same as directive 
+
+Summary Module 7
+    custom directives
+    data to directives
+    local va global directive
+    custom filter
+    local vs global filter
+
+Deploying Vue Applications to Production
+
