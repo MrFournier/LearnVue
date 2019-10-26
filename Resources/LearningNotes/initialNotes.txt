@@ -1407,4 +1407,130 @@ Summary Module 7
     local vs global filter
 
 Deploying Vue Applications to Production
+    Basic with CLI build is a Zero Config build
+        cane make a production build from it
 
+Zero Config Deployment
+    lots of good options
+
+    can add or remove things from config
+
+Creating a deployable build
+    npm run build
+
+    creates a deploy build with what CLI includes
+
+    creates a deployable build folder
+        dist/
+
+    Just have to copy the dist/ folder to a place where it can be served by the web server
+
+dist/
+    css/
+        came from the code we wrote
+    js/
+        came from the code we wrote
+    img/
+        came from the code we wrote
+    index.html
+        came from public folder
+        this is the starting point for our application
+    favicon.ico
+
+anything placed in the public folder will go into dist/
+
+Using Evironment Variables and Build Modes
+    default mode
+        npm run build -- --mode=production
+
+    dev build
+        npm run build -- --mode=development
+            npm run serve does this
+
+    staging
+        npm run build -- --mode=staging
+
+        app.js
+
+        favicon.ico
+
+        img/
+
+        index.html
+
+        .env.stagging
+            NODE_ENV=production
+
+        sets the node environment to be one that looks just like production
+        npm run build -- --mode=staging
+
+        can replace staging with any name
+
+        .env vars can have other values like DB connections ect.
+            NEVER commit secret ones
+        
+        env variables are only available to client side code if there start with VUE_APP
+            with the exception of NODE_ENV
+
+Deploying to Production
+    adding routes to the server to be able to add a dist/ folder and have it serve production
+        to the build-a-bot-server
+
+    app.use('/', express.static('dist', {index: 'index.html'}))
+        whenever anyone hits the route url and its not handled by routes aboe then serve the index.html file from this dist folder
+
+    deploying a vue app is just copying the dist folder to your web app
+
+    npm start
+        starts the server
+
+Deep Linking on the Server
+    Can not navigate directly to deep urls because only the index.html file knows how to serve the vue app
+
+    npm install connect-history-api-fallback
+        middleware
+
+    const history = require('connect-history-api-fallback');
+
+    app.use(history({index: '/index.html'}));
+    if a request come in for a file that is not handled in the routes below then redirect to /index.html
+
+Inspecting the built in webpack config
+    vue inspect --mode=production > webpack.config.js
+        putting the webpack config to a file for us to view
+
+Customizing Webpack Config
+    add a section to our vue.config.js file
+
+    configureWebpack: {
+        modules: {
+            rules: [
+                test: /\.coffee$/,
+                use: ['coffee-loader'],
+            ]
+        },
+    },
+    cli uses webpack chain and merge to add this to the file
+    anything here will be added to or override 
+
+    To edit rules
+        copy and changing something can result in duplicates
+
+        instead
+
+    configureWebpack: (config) => {
+        config.modules.rules.push({
+            test: /\.coffee$/,
+            use: ['coffee-loader'],
+        })
+
+        const newRule = {
+            copied in rule with change here
+        }
+
+        const imagesRuleIndex = config.module.rules
+            .findIndex(x => x.test.source.includes('png|jpe?g|gif'));
+
+        config.module.rules.splice(imagesRuleIndex, 1, newRule);
+    },
+    set it to a function and pass in a config object
