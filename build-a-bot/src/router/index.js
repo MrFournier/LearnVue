@@ -12,6 +12,7 @@ import RobotArms from '../parts/RobotArms.vue';
 import RobotTorsos from '../parts/RobotTorsos.vue';
 import RobotBases from '../parts/RobotBases.vue';
 import ShoppingCart from '../cart/ShoppingCart.vue';
+import CartCheckout from '../cart/CartCheckout.vue';
 
 Vue.use(Router);
 
@@ -75,6 +76,11 @@ export default new Router({
       path: '/cart',
       name: 'Cart',
       component: ShoppingCart,
+    },
+    {
+      path: '/checkout',
+      name: 'Checkout',
+      component: CartCheckout,
     },
   ],
 });

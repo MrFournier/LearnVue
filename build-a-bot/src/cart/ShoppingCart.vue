@@ -46,6 +46,9 @@
         </tr>
       </tbody>
     </table>
+    <router-link class="checkout" :to="{name: 'Checkout'}" exact>
+      Checkout
+    </router-link>
  </div>
 </template>
 
