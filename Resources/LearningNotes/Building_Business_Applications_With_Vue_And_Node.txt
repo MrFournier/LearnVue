@@ -1,0 +1,116 @@
+Building Business Applications with Vue.js and MongoDB
+
+Module 2
+Introduces you to the Venom stack
+
+Venom stack
+    Vue.js
+    Express.js
+    Node.js
+    Mongoose for MongoDB
+
+Application Design Meeting
+    Course develops a mvp from fictious client meetings
+
+
+
+
+Module 3 Technology Stack
+Architectural Approach
+    - UI Layer
+    - Restful API
+    - Data Access
+    - Separation of Concerns
+
+Client (UI)
+    Routes
+    Components
+    State
+
+Server (API)
+    API Routes
+    Models
+
+Core Frameworks
+    Vue.js
+    Express.js
+    Node.js
+        reccomended previous knowledge of Node
+
+Data Access Layer
+    Mongoose
+    MongoDB
+
+API Layer
+    Express.js will be the framework on top of Node.js where we will build our API
+    Will take advantage of Express Router
+    
+User Experience
+    Material Design
+        A visual language that synthesizes the classic principles of good deisgn with innovation of technology and science
+
+    Principles
+        Material is the metaphor
+            Inspired by the physical world and its textures, including how they reflect light and cast shadows. Material surfaces reimagine the mediums of paper and ink.
+        Bold, Graphic, Intentional
+            Guided by print design methods - typeography, grids, space, scale, color, and imagery - to create hierarchy, meaning, and focus the imerse viewer inthe experience.
+        Motion provides meaning
+            Focuses attention and maintains continuity, through subtle feedback and coherent transistions. As elements appear on screen, they transform and reorganize the environment, with interactions generating new transformations
+        Flexible Foundation
+            Integrated with a custom code base that allows seamless implementation of components, plug-ins, and design elements
+        Cross-platform
+            Maintains the same UI across platforms
+
+Vuetify
+    Provides large library of good looking components that follow the Material Deisgn principles
+
+    Has template and script code available for components
+        including forms
+
+    Documentation
+        https://vuetifyjs.com/en/getting-started/quick-start
+
+Other Libraries
+    Vue-CLI
+    Eslint
+    Webpack
+
+    Axios
+        Promise based HTTP Client
+        communicates with Restful API client
+
+    bodyparser
+        used to parse incoming request body
+    
+    Morgan
+        request logger
+
+    nodemon
+    cors
+    bcrypt.js
+    
+Development Tools
+    VS Code
+    Postman
+        getpostman.com
+    Studio 3T
+
+
+
+
+Module 4 Setting Up the Demo Application
+
+Setting up our project
+    install node
+    install yarn
+        yarnpkg.com
+        brew install yarn
+
+repos/LearnVue/Venom
+    vue init webpack client
+
+    To get started:
+        cd client
+        npm run dev
+
+
