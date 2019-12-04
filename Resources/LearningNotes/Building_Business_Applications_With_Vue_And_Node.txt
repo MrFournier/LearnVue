@@ -113,4 +113,25 @@ repos/LearnVue/Venom
         cd client
         npm run dev
 
+Baseline Architecture
+Folder Structure
+    we will mimic two servers using folders for this Demo
+
+Client
+    Houses Vue.js interface project code
+
+Server
+    API end points and mongoose Models
+
+Package.json
+    shows name and descripiton of project
+
+    depenedencies
+    dev depenedencies
+
+
+
+
+
+Module 5 Designing the Data Layer with MongoDB and Mongoose
 
