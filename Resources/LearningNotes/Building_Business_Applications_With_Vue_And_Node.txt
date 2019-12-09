@@ -134,4 +134,119 @@ Package.json
 
 
 Module 5 Designing the Data Layer with MongoDB and Mongoose
+    Code first or data first?
+        Questions
+        Is more known about how we want the user to interact ewith the application. Data concerns are secondary or supportive in nature?
+        or 
+        Do we have a better understanding of the business data requirements. Design is secondary or is not as critical to success?
 
+    This course will use a Data first approach
+
+Setting up MongoDB
+    Install MongoDB
+    Studio 3T
+    Insert Sample Data
+        Users for Development
+        Sample transactions
+
+Install MongoDB
+    docs.mongodb.com/manual/installation/
+
+    following mac os instructions
+        use homebrew
+
+        brew tap mongodb/brew
+
+        brew install mongodb-community@4.2
+
+        brew link --overwrite mongodb-community
+            overwrote existing mongodb files
+
+    Run MongoDB as a Mac OS service
+        brew services start mongodb-community
+
+    Verify MongoDB is running
+        ps aux | grep -v grep | grep mongod
+
+Creating new DB
+    called globomantics (after fake client)
+
+Adding new collections
+    Users
+        auto index id turned on
+    transactions
+        auto index id turned on
+
+    Import data JSON files
+        right click import
+        select json
+        pick both json files
+
+Mongoose: The Bridge to MongoDB
+    Mongoose
+        object document mapper
+
+    Everything in Mongoose starts with a schema
+
+    schema
+    ex
+        const mongoose = require('mongoose')
+        // Schema will mirror the mongodb document we are getting data back from
+        const Schema = mongoose.Schema
+
+        let userSchema = new Schema({
+            email:      String,
+            name:       String,
+            password:   String, // This will want to be encrypted later on
+            createdOn:  Date,
+            lastLogin:  Date,
+            isActive:   Boolean
+        })
+
+    Mongoose Schema Type : JavaScript Data Type
+        String                  String
+        Number                  Number
+        Date                    Object
+        Buffer                  Object
+        Boolean                 Boolean
+        Mixed                   Object 
+        ObjectId                Object
+        Array                   Array(Object)
+
+    Mixed
+        allows freedom to store whatever you want
+        allows variety of data types within the same field
+            must write code to deal with this data
+    
+Develop the Mongoose Schemas
+    npm init -f
+        initialize the server project
+        - f signals to use default options
+
+    npm install nodemon -g
+        watcher to restart server when changes are made
+
+    yarn add eslint
+        installs a linter to enforce coding practices
+
+    node ./node_modules/eslint/bin/eslint.js --init
+        run script to initialize and create the eslint.rc files
+
+    yarn add mongoose
+        installs mongoose
+
+    created both mongoose Schemas
+        User
+        Transaction
+
+Next Steps
+    What we did
+        MongoDB Setup
+        Mongoose Schemas created
+    Time to work on the API side of things
+
+
+
+
+
+Module 6 Developing the API with Node and Express
