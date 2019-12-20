@@ -250,3 +250,193 @@ Next Steps
 
 
 Module 6 Developing the API with Node and Express
+
+TransactionsSchema
+    userId
+        this field can be thought of as a FK relationship
+
+Design the API
+    HTTP Verbs
+        HTTP Verb           CRUD Action
+            POST                Create
+            GET                 Read
+            PUT                 Update/Replace
+            PATCH               Update/Modify
+            DELETE              Delete
+
+    Put
+        completely replaces the record
+    Patch 
+        modifies exisiting record/document
+        probably won't need this
+
+    User Endpoint
+        POST, GET, Put
+
+    Transaction Endpoint
+        Post, Get, Put, Delete
+
+API Folder
+    routes go under here
+        'endpoints'
+
+    Server
+        api
+            routes
+                transactions.js 
+                user.js
+            index.js 
+        models 
+            transactions.js
+            user.js
+
+    index.js in the api folder is used to conveintienly bundle all of the other route files
+
+    routes will reference a specific model
+
+    user route ex
+        const User = require('../../models/user')
+
+        module.exports = function (router) {
+            router.get('/user/:id', function (req, res) {
+                User.findById(req.params.id).exec()
+                    .then(docs => res.status(200)
+                        .json(docs))
+            })
+        }
+
+    1) require the User model file (mongoose schema)
+    2) pass a reference to the express router
+    3) make get call, via mongoose find by id function
+        on success return a json file and 200 status
+    
+Demo
+
+Install Express
+    yarn add express
+        this installs express js    
+
+app.js
+    in server root
+    Main kickoff point for express server
+
+    const api = require('./api')
+        picks up all the routes bundled in the index file for us
+
+Helpfully NPM packages
+    yarn add morgan
+    yarn add body-parser
+
+    morgan
+        logs requests to our api
+    
+    body-parser
+        parses request bodies
+
+    app.set('port', (process.env.PORT || 8081))
+        tell express application what port to listen on
+        defaults to 8081 if no PORT node environment var
+
+    app.use(express.static('static'))
+        give express access to static files in the project
+        common practice
+
+    app.use(function (req, res, next) {
+        const err = new Error('Not Found')
+        err.status = 404
+        res.json(err)
+    })
+    handles requests to unknown resources
+
+    db.on('error', console.error.bind(console, 'connection error:'))
+        testing for errors and console logging if they are there
+    
+    db.once('open', function () {
+        console.log('Connected to MongoDB')
+
+        app.listen(app.get('port'), function () {
+            console.log('API Server Listening on port ' + app.get('port') + '!')
+        })
+    })
+    Once db connection open callback function gets app to start listening on our port
+
+API Routes
+    .exec()
+        returns a promise
+
+    module.exports = function (router) {
+        router.get('/user/:id', function (req, res) {
+            User.findById(req.params.id).exec()
+            .then(docs => res.status(200)
+                .json(docs))
+            .catch(err => res.status(500)
+                .json({
+                    message: 'Error finding user',
+                    error: err
+                }))
+        })
+    }
+    One end point to retrieve users from the db via id
+    returns doc as json on success
+    return json error with 500 status on fail
+
+    router.put('/user/:id', function (req, res) {
+        console.log(req.body)
+        let qry = { _id: req.params.id }
+        let doc = {
+            // first: req.body.firstname,
+            // last: req.body.lastname,
+            // email: req.body.email,
+            // password: req.body.password,
+            isActive: req.body.isActive
+        }
+        console.log(doc)
+        User.update(qry, doc, function (err, respRaw) {
+            if (err) return console.log(err)
+            res.status(200).json(respRaw)
+        })
+    })
+    let doc
+        note this is creating a new document and mapping values
+            useful for if you only want certain values to be updateable
+
+    const pipeline = [
+      {
+        $match: {
+          userId: mongoose.Types.ObjectId(userId),
+        }
+      },
+      {
+        $match: {
+          transactionDate: { $lt: endDt }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          charges: { $sum: '$charge' },
+          deposits: { $sum: '$deposit' }
+        }
+      }
+    ]
+    pipeline
+        $group defines the values we want back
+        this is passed as a parameter into the mongoose aggregate function
+
+Debugging and Testing the API
+    used postman to check data from end points
+
+Next Steps
+    Done
+        API services
+        Test with postman
+            works
+    Next
+        Vue.js client project "stub"
+        Vuetify
+
+
+
+
+
+Module 7 UI Development with Vue.js and Vuetify

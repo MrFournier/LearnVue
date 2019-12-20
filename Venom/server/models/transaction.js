@@ -6,8 +6,8 @@ let transactionSchema = new Schema({
     transactionDate: { type: Date, required: true },
     transactionType: { type: String, required: true },
     description: { type: String, required: true },
-    charge: { type: Double, default: 0 },
-    deposit: { type: Double, default: 0 },
+    charge: { type: Number, default: 0 },
+    deposit: { type: Number, default: 0 },
     notes: { type: String, default: '' },
     createdOn: { type: Date, default: Date.now },
 })
