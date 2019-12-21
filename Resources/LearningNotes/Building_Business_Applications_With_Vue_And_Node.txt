@@ -440,3 +440,133 @@ Next Steps
 
 
 Module 7 UI Development with Vue.js and Vuetify
+
+Stubbing the Vue Files 
+    Login component
+        no registration page needed
+    Transactions 
+        list of transactions for current month
+    Edit Transaction 
+        add new and edit exisiting transactions
+    About
+        not required may be able to add
+
+    each will be single file components
+        compose application out of components responsible for specific feature
+
+Component Structure
+    Template 
+    Script
+    Style 
+
+Demo 
+main.js 
+    starting point set up for us by the Vue CLI 
+App.vue
+    main component that houses other components
+    set up by vue cli 
+Components
+    Home.vue
+        primiary component we will reference from the app component
+    Transactions.vue
+        list of current months transactions
+    EditTransactions.vue
+    Login.vue
+    About.vue
+
+main.js
+    Vue is imported here
+    App component is imported here
+
+    New instance of vue is created and we are registering the main app component
+
+App.vue
+    <router-vue/>
+        where we will render in our own components
+
+Home.vue
+    Transactions.vue and EditTransactions.vue will be child components to this
+
+    Must import and register components to be used in other components in the script block
+
+    ex
+        import Transactions from './Transactions.vue'
+        // imports transactions component
+    
+        export default {
+        components: {
+            Transactions
+            }
+        }
+        // register the transactions component
+
+    vue components use kebab case
+    EditTransactions => edit-transactions
+
+Setting up Routing 
+    Home (default route)
+    Login
+    About
+    Transactions
+        - Child component that lives in home
+        - Route not needed
+    Edit Transactions
+        - Route not need
+    
+router folder created for us by vue cli 
+
+This project has simple routing so only one route file will be okay
+    index.js
+
+we will use vue-router
+
+Default "fallback" route
+    this is where the user will be taken should a route they enter not exist
+
+vue-router
+    import Router from 'vue-router'
+
+    Vue.use(Router)
+        this is asking vue to use the vue-router plugin
+
+@
+    alias that points back to the route src folder of our vue project
+
+Default route object
+    {
+      path: '*',
+      redirect: '/'
+    }
+    the astrix for the path catches all of the routes that we have not previsouly specified
+
+Testing the Baseline Setup
+    it all works
+
+Selecting a Vuetify Layout
+    v-app
+        component
+        must be the parent of all vuetify components
+
+Add vuetify to the project
+    npm install vuetify --save
+    or
+    yarn add vuetify
+
+plugin vuetify to vue.js
+    main.js or index.js
+
+    import Vue from 'vue'
+    import vuetify from 'vuetify'
+
+    Vue.use(Vuetify)
+
+    import 'vuetify/dist/vueitfy.min.css'
+    import 'material-design-icons-iconfont/dist/material-design-icons.min.css'
+
+Vuetify components review
+    uses a 12 point grid layout
+
+    documentation for all vuetify comonents available
+
+Using Vuetify Components
+
